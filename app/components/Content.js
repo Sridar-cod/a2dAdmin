@@ -2,19 +2,18 @@
 import React, { useEffect, useState } from "react";
 
 const Content = () => {
-  const [data, setData] = useState([]); // Store table data
-  const [search, setSearch] = useState(""); // Store search query
-  const [sortOrder, setSortOrder] = useState(true); // Toggle sort order
-  const [currentPage, setCurrentPage] = useState(1); // Current page
-  const [rowsPerPage] = useState(5); // Rows per page (you can change this to any number)
-
-  // Fetch data from your API or URL
+  const [data, setData] = useState([]); 
+  const [search, setSearch] = useState("");
+  const [sortOrder, setSortOrder] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1); 
+  const [rowsPerPage] = useState(5);
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("https://a2dadmin.onrender.com/api/enquiry"); // Replace with your URL
+        const response = await fetch("https://a2dadmin.onrender.com/api/enquiry");
         const result = await response.json();
-        setData(result); // Assuming the API returns an array of objects
+        setData(result); 
         console.log(await result,"dataaaaa")
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -23,33 +22,28 @@ const Content = () => {
     fetchData();
   }, []);
 
-  // Search filter
   const filteredData = data.filter((item) =>
     Object.values(item).some((value) =>
       value.toString().toLowerCase().includes(search.toLowerCase())
     )
   );
 
-  // Sort function
   const handleSort = (key) => {
     const sortedData = [...data].sort((a, b) => {
       if (a[key] < b[key]) return sortOrder ? -1 : 1;
       if (a[key] > b[key]) return sortOrder ? 1 : -1;
       return 0;
     });
-    setSortOrder(!sortOrder); // Toggle sort order
+    setSortOrder(!sortOrder); 
     setData(sortedData);
   };
 
-  // Pagination logic
   const indexOfLastRow = currentPage * rowsPerPage;
   const indexOfFirstRow = indexOfLastRow - rowsPerPage;
   const currentRows = filteredData.slice(indexOfFirstRow, indexOfLastRow);
 
-  // Handle page change
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-  // Generate page numbers
   const pageNumbers = [];
   for (let i = 1; i <= Math.ceil(filteredData.length / rowsPerPage); i++) {
     pageNumbers.push(i);
@@ -59,7 +53,6 @@ const Content = () => {
     <div className="container mt-4">
       <h2>Dynamic Table with Pagination</h2>
 
-      {/* Search Input */}
       <input
         type="text"
         className="form-control mb-3"
@@ -68,7 +61,7 @@ const Content = () => {
         onChange={(e) => setSearch(e.target.value)}
       />
 
-      {/* Table */}
+      
       <table className="table table-striped table-bordered">
         <thead>
           <tr>
