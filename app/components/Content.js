@@ -12,7 +12,7 @@ const Content = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("http://localhost:3000/api/enquiry"); // Replace with your URL
+        const response = await fetch("https://a2dadmin.onrender.com/api/enquiry"); // Replace with your URL
         const result = await response.json();
         setData(result); // Assuming the API returns an array of objects
         console.log(await result,"dataaaaa")
