@@ -14,6 +14,6 @@ const enquirySchema = new Schema({
 });
 
 
-const enquiryModel = models.getEnquiry || model('getEnquiry', enquirySchema);
+const enquiryModel = models.Enquiry || model('Enquiry', enquirySchema);
 
 export default enquiryModel;
