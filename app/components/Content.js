@@ -1,41 +1,35 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
+import useSWR from "swr"; // Import useSWR
+
+const fetcher = (url) => fetch(url).then((res) => res.json());
 
 const Content = () => {
-  const [data, setData] = useState([]); 
   const [search, setSearch] = useState("");
   const [sortOrder, setSortOrder] = useState(true);
-  const [currentPage, setCurrentPage] = useState(1); 
+  const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage] = useState(5);
-  
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch("https://a2dadmin.onrender.com/api/enquiry");
-        const result = await response.json();
-        setData(result); 
-        console.log(await result,"dataaaaa")
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-    fetchData();
-  }, []);
 
-  const filteredData = data.filter((item) =>
+  // Use SWR to fetch the data
+  const { data: dataa, error } = useSWR('https://a2dadmin.onrender.com/api/enquiry', fetcher);
+
+  // If data is not yet loaded or there was an error
+  if (error) return <div>Error loading data</div>;
+  if (!dataa) return <div>Loading...</div>;
+
+  const filteredData = dataa.filter((item) =>
     Object.values(item).some((value) =>
       value.toString().toLowerCase().includes(search.toLowerCase())
     )
   );
 
   const handleSort = (key) => {
-    const sortedData = [...data].sort((a, b) => {
+    const sortedData = [...dataa].sort((a, b) => {
       if (a[key] < b[key]) return sortOrder ? -1 : 1;
       if (a[key] > b[key]) return sortOrder ? 1 : -1;
       return 0;
     });
-    setSortOrder(!sortOrder); 
-    setData(sortedData);
+    setSortOrder(!sortOrder);
   };
 
   const indexOfLastRow = currentPage * rowsPerPage;
@@ -61,12 +55,11 @@ const Content = () => {
         onChange={(e) => setSearch(e.target.value)}
       />
 
-      
       <table className="table table-striped table-bordered">
         <thead>
           <tr>
-            {data.length > 0 &&
-              Object.keys(data[0]).map((key) => (
+            {dataa.length > 0 &&
+              Object.keys(dataa[0]).map((key) => (
                 <th key={key} onClick={() => handleSort(key)}>
                   {key.toUpperCase()}
                   <button className="btn btn-sm btn-light ms-2">

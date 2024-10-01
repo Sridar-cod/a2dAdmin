@@ -3,11 +3,13 @@ import enquiryModel from "@/models/enquiryModel";
 
 export async function GET() {
   try {
-    await connectMongo()
-    const enquiries = await enquiryModel.find({})
-    return Response.json(enquiries)
+    await connectMongo();
+    const enquiries = await enquiryModel.find({});
+    return new Response(JSON.stringify(enquiries), {
+      headers: { "Cache-Control": "no-store" }
+    });
   } catch (err) {
-    return Response.json({message:err.message})
+    return new Response(JSON.stringify({ message: err.message }));
   }
- 
 }
+
