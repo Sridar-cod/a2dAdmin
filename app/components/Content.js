@@ -1,21 +1,26 @@
 "use client";
-import React, { useState } from "react";
-import useSWR from "swr"; // Import useSWR
-
-const fetcher = (url) => fetch(url).then((res) => res.json());
+import React, { useEffect, useState } from "react";
 
 const Content = () => {
+  const [data, setData] = useState([]); 
   const [search, setSearch] = useState("");
   const [sortOrder, setSortOrder] = useState(true);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1); 
   const [rowsPerPage] = useState(5);
-
-  // Use SWR to fetch the data
-  const { data: data, error } = useSWR('https://a2dwebsite.onrender.com/api/enquiry', fetcher);
-
-  // If data is not yet loaded or there was an error
-  if (error) return <div>Error loading data</div>;
-  if (!data) return <div>Loading...</div>;
+  
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch("https://a2dwebsite.onrender.com/api/enquiry");
+        const result = await response.json();
+        setData(result); 
+        console.log(await result,"dataaaaa")
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    fetchData();
+  }, []);
 
   const filteredData = data.filter((item) =>
     Object.values(item).some((value) =>
@@ -29,7 +34,8 @@ const Content = () => {
       if (a[key] > b[key]) return sortOrder ? 1 : -1;
       return 0;
     });
-    setSortOrder(!sortOrder);
+    setSortOrder(!sortOrder); 
+    setData(sortedData);
   };
 
   const indexOfLastRow = currentPage * rowsPerPage;
@@ -55,11 +61,12 @@ const Content = () => {
         onChange={(e) => setSearch(e.target.value)}
       />
 
+      
       <table className="table table-striped table-bordered">
         <thead>
           <tr>
             {data.length > 0 &&
-              Object.keys(dataa[0]).map((key) => (
+              Object.keys(data[0]).map((key) => (
                 <th key={key} onClick={() => handleSort(key)}>
                   {key.toUpperCase()}
                   <button className="btn btn-sm btn-light ms-2">
