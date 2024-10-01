@@ -11,20 +11,20 @@ const Content = () => {
   const [rowsPerPage] = useState(5);
 
   // Use SWR to fetch the data
-  const { data: dataa, error } = useSWR('https://a2dadmin.onrender.com/api/enquiry', fetcher);
+  const { data: data, error } = useSWR('https://a2dwebsite.onrender.com/api/enquiry', fetcher);
 
   // If data is not yet loaded or there was an error
   if (error) return <div>Error loading data</div>;
-  if (!dataa) return <div>Loading...</div>;
+  if (!data) return <div>Loading...</div>;
 
-  const filteredData = dataa.filter((item) =>
+  const filteredData = data.filter((item) =>
     Object.values(item).some((value) =>
       value.toString().toLowerCase().includes(search.toLowerCase())
     )
   );
 
   const handleSort = (key) => {
-    const sortedData = [...dataa].sort((a, b) => {
+    const sortedData = [...data].sort((a, b) => {
       if (a[key] < b[key]) return sortOrder ? -1 : 1;
       if (a[key] > b[key]) return sortOrder ? 1 : -1;
       return 0;
@@ -58,7 +58,7 @@ const Content = () => {
       <table className="table table-striped table-bordered">
         <thead>
           <tr>
-            {dataa.length > 0 &&
+            {data.length > 0 &&
               Object.keys(dataa[0]).map((key) => (
                 <th key={key} onClick={() => handleSort(key)}>
                   {key.toUpperCase()}
