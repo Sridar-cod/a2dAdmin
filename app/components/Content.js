@@ -248,9 +248,10 @@ const Content = () => {
 
   const filteredData = data.filter((item) =>
     Object.values(item).some((value) =>
-      value.toString().toLowerCase().includes(search.toLowerCase())
+      value.toString().toLowerCase().includes(search.toString().toLowerCase())
     )
   );
+
 
   const handleSort = (key) => {
     const sortedData = [...data].sort((a, b) => {
@@ -273,12 +274,12 @@ const Content = () => {
   }
 
   if (isLoading) {
-    return <div> <h4 className='text-certer'>Loading...</h4></div>; 
+    return <div> <h4 className='text-center pt-3'>Loading...</h4></div>; 
   }
 
   return (
     <div className="bgColor content w-100">
-      <div className="innerContent m-4">
+      <div className="innerContent p-4">
         <div className="innerContentTop mb-4 d-flex justify-content-between align-items-center">
           <h5>Manage User</h5>
           <div className="userCount">
@@ -296,8 +297,8 @@ const Content = () => {
           />
         </div>
 
-        <div className="table-responsive" style={{ overflowX: "auto" }}>
-          <table className="table table-striped table-bordered">
+        <div className="table-responsive " style={{ overflowX: "auto" }}>
+          <table className="table table-striped b1 table-bordered cus-table">
             {data.length === 0 && (
               <h5 className="text-center mt-4">No users</h5>
             )}
