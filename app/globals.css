@@ -61,4 +61,5 @@
 }
 .content {
   transition: 0.8s;
+  min-height: 91vh;
 }
