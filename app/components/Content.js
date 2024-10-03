@@ -221,7 +221,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 
-const Content = ({ navWidth }) => {
+const Content = () => {
   const [data, setData] = useState([]);
   const [search, setSearch] = useState("");
   const [sortOrder, setSortOrder] = useState(true);

@@ -1,10 +1,10 @@
+ 'use client'
 import React, { useState } from "react";
 import { signOut, useSession } from "next-auth/react";
 
 const TopNav = () => {
   const [toggle, setToggle] = useState(false);
 
-  // Modal component for Logout confirmation
   const LogOutPop = ({ signOut, handleClose }) => {
     return (
       <div
@@ -50,12 +50,10 @@ const TopNav = () => {
 
   const { data: session } = useSession();
 
-  // Function to toggle the modal visibility
   const handleLogout = () => {
     setToggle(!toggle);
   };
 
-  // Function to close the modal
   const handleClose = () => {
     setToggle(false);
   };
@@ -73,7 +71,6 @@ const TopNav = () => {
         </div>
       </div>
 
-      {/* Show modal when toggle is true */}
       {toggle && <LogOutPop signOut={signOut} handleClose={handleClose} />}
     </>
   );
