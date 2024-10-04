@@ -4,13 +4,15 @@ import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
 const Login = () => {
-
+  const [loading, setLoading] = useState(false);
   const [adminName, setAdminName] = useState("");
   const [adminPassword, setAdminPassword] = useState("");
   const [error, setError] = useState("");
   const router = useRouter();
 
   const handleLogin = async () => {
+    setLoading(true)
+
     try {
       const res = await signIn("credentials", {
         redirect: false,
@@ -20,10 +22,14 @@ const Login = () => {
 
       if (res.error) {
         console.log(res.error)
+        setLoading(false)
+
         setError("Invalid credentials");
       } else {
         setError("");
+        
         router.replace("/dashboard");
+        
       }
     } catch (error) {
       console.error(error);
@@ -59,9 +65,13 @@ const Login = () => {
             onChange={(e) => setAdminPassword(e.target.value)}
           />
         </div>
-        <button className="btn btn-primary w-100 mb-3" onClick={handleLogin}>
-          Login
-        </button>
+         <button
+      className="btn btn-primary w-100 mb-3"
+      disabled={loading}
+      onClick={handleLogin}
+    >
+      {loading ? 'Loading...' : 'Login'}
+    </button>
         {error && <div className="text-danger text-center">{error}</div>}
       </div>
     </div>
